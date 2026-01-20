@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import '../App.css'
-import { useForm } from 'react-hook-form'
+import { set, useForm } from 'react-hook-form'
 
 function Dashboard() {
 
@@ -8,28 +8,32 @@ function Dashboard() {
   const [items , setItems] = useState([]);
   
   useEffect(()=>{
-    const dispItems = JSON.parse(localStorage.getItem('items'))||[];
+    const dispItems:string = JSON.parse(localStorage.getItem('items'))||[];
     setItems(dispItems);
+    console.log(dispItems);
   },[]);
 
-  const onSubmit = (data) =>{
+  const onSubmit = (data:Object) =>{
     // console.log(typeof(data));
     addItem(data);
     // listproduct();
   }
 
-  const addItem = (data) =>{
+  const addItem = (data:Object) =>{
 
-    let items = JSON.parse(localStorage.getItem('items'))||[]; 
+    let olditems = JSON.parse(localStorage.getItem('items'))||[]; 
     // console.log('here : ', data.ProductName , typeof(data.ProductName));
 
     // items = items + ',' +(data.ProductName);
-    items.push({
+    const newItem ={
       ProductName: data.ProductName,
       Price : data.Price,
       Category : data.Category,
-    })
-    localStorage.setItem('items' , JSON.stringify(items));
+    };
+
+    const updated = [...olditems , newItem];
+    localStorage.setItem('items' , JSON.stringify(updated));
+    setItems(updated);
     // console.log(localStorage.getItem('items'));
     // localStorage.setItem('items' , items);
     // localStorage.setItem(data.ProductName , [data.Price , data.Category]);
@@ -59,8 +63,14 @@ function Dashboard() {
         <div>
            <h5>Items</h5>
            <div>
-            {/* {items.map((item, index))} */}
-            {items}
+           <ul>
+            { items.map((item , index) => (
+                <li key={index}>
+                  {item.ProductName} - {item.Category} - {item.Price}
+                </li>
+             ))}
+           
+           </ul>
            </div>
         </div>
         <div>
