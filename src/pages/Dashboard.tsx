@@ -7,10 +7,15 @@ function Dashboard() {
   const {register  , handleSubmit , formState : {error}} = useForm();
   const [items , setItems] = useState([]);
   
+  useEffect(()=>{
+    const dispItems = JSON.parse(localStorage.getItem('items'))||[];
+    setItems(dispItems);
+  },[]);
+
   const onSubmit = (data) =>{
     // console.log(typeof(data));
     addItem(data);
-    listproduct();
+    // listproduct();
   }
 
   const addItem = (data) =>{
@@ -25,14 +30,15 @@ function Dashboard() {
       Category : data.Category,
     })
     localStorage.setItem('items' , JSON.stringify(items));
-    console.log(localStorage.getItem('items'));
+    // console.log(localStorage.getItem('items'));
     // localStorage.setItem('items' , items);
     // localStorage.setItem(data.ProductName , [data.Price , data.Category]);
    
   }
 
-    const listproduct =()=> {
-      
+    // const listproduct =()=> {
+    //     const allItems = localStorage.getItem('items');
+    //     console.log(allItems);
         // if(allitems){
         //     const words = allitems.split(',');
             
@@ -42,7 +48,7 @@ function Dashboard() {
         //     });
         // }    
         
-    }
+    // }
   return (
     <>
     
@@ -53,7 +59,8 @@ function Dashboard() {
         <div>
            <h5>Items</h5>
            <div>
-            {/* {showallitems} */}
+            {/* {items.map((item, index))} */}
+            {items}
            </div>
         </div>
         <div>
