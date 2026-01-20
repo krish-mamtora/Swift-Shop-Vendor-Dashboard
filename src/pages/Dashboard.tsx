@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../App.css'
 import { useForm } from 'react-hook-form'
 
 function Dashboard() {
 
   const {register  , handleSubmit , formState : {error}} = useForm();
-
+  const [items , setItems] = useState([]);
+  
   const onSubmit = (data) =>{
     // console.log(typeof(data));
     addItem(data);
@@ -14,27 +15,32 @@ function Dashboard() {
 
   const addItem = (data) =>{
 
-    let items = (localStorage.getItem('items')); 
+    let items = JSON.parse(localStorage.getItem('items'))||[]; 
     // console.log('here : ', data.ProductName , typeof(data.ProductName));
 
-    items = items + ',' +(data.ProductName);
-  
+    // items = items + ',' +(data.ProductName);
+    items.push({
+      ProductName: data.ProductName,
+      Price : data.Price,
+      Category : data.Category,
+    })
     localStorage.setItem('items' , JSON.stringify(items));
-    localStorage.setItem('items' , items);
-    localStorage.setItem(data.ProductName , [data.Price , data.Category]);
+    console.log(localStorage.getItem('items'));
+    // localStorage.setItem('items' , items);
+    // localStorage.setItem(data.ProductName , [data.Price , data.Category]);
    
   }
 
     const listproduct =()=> {
-        let allitems = localStorage.getItem('items');
-        if(allitems){
-            const words = allitems.split(',');
+      
+        // if(allitems){
+        //     const words = allitems.split(',');
             
-            words.forEach((word,index) => {
-                console.log(`${word} is at ${index}`);
-                // <li key={index}>{word}</li>
-            });
-        }    
+        //     words.forEach((word,index) => {
+        //         console.log(`${word} is at ${index}`);
+        //         store.push(word);
+        //     });
+        // }    
         
     }
   return (
@@ -47,7 +53,7 @@ function Dashboard() {
         <div>
            <h5>Items</h5>
            <div>
-           {/* {listproduct} */}
+            {/* {showallitems} */}
            </div>
         </div>
         <div>
@@ -55,12 +61,12 @@ function Dashboard() {
           <div style={{border:"1px solid black"}}>
             <form  onSubmit={handleSubmit(onSubmit)}>
                 <span>Product Name : </span>
-                <input {...register("ProductName" , {required : true})} /> <br />
+                <input {...register("ProductName" , {required : true})} placeholder='Product Name' /> <br />
                 <span>Category : </span>
-                <input {...register("Category" , {required : true})} /> <br />
+                <input {...register("Category" , {required : true})} placeholder='Category' /> <br />
                 <span>Price : </span>
-                <input {...register("Price" , {required : true})} /> <br />
-              <input type="submit" />
+                <input {...register("Price" , {required : true})} placeholder='Price'/> <br />
+             <button type='submit'>Add Item</button>
             </form>
           </div>
         </div>
