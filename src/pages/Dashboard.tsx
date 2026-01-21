@@ -7,7 +7,8 @@ function Dashboard() {
 
   const {register  , handleSubmit , formState : {error}} = useForm();
   const [items , setItems] = useState([]);
-  
+  const [totalstock , setTotalStock] = useState(0);
+
   useEffect(()=>{
     const dispItems:string = JSON.parse(localStorage.getItem('items'))||[];
     setItems(dispItems);
@@ -32,7 +33,7 @@ function Dashboard() {
       Category : data.Category,
       Stock : data.Stock,
     };
-
+    setTotalStock(Number(totalstock)+Number(data.Stock));
     const updated = [...olditems , newItem];
     localStorage.setItem('items' , JSON.stringify(updated));
     setItems(updated);
@@ -63,6 +64,7 @@ function Dashboard() {
           localStorage.setItem('items' , JSON.stringify(allitems));
            setItems(allitems);
     }
+    
 
   return (
     <>
@@ -81,10 +83,17 @@ function Dashboard() {
                   {item.Price<=100 && <p>Affordable</p>}
                   {item.Price>100 && item.Price<1000 && <p>Medium Range</p>}
                   {item.Price>=1000 && <p>Costly {item.Category}</p>}
+
+                  {item.Stock<=5 && <p>Limited Quantity</p>}
+                
                   <button onClick={() => deleteItem(index)}>Delete</button>
                 </li>
+
              ))}
            </ul>
+              <h5>Total : {items.length} Unique Items</h5>
+              {totalstock >0 && <p>Total stock {totalstock}</p>}
+
            </div>
         </div>
         <div>
