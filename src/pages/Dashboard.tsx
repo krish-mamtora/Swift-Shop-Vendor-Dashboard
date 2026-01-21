@@ -53,6 +53,14 @@ function Dashboard() {
         // }    
         
     // }
+   const deleteItem = (index) =>{
+        // localStorage.setItem()
+        console.log(index);
+         let allitems = JSON.parse(localStorage.getItem('items'))||[]; 
+         allitems.splice(index , 1);
+          localStorage.setItem('items' , JSON.stringify(allitems));
+           setItems(allitems);
+    }
   return (
     <>
     
@@ -60,16 +68,16 @@ function Dashboard() {
      
       <div >
         <h4>Dashboard</h4>
-        <div>
+        <div >
            <h5>Items</h5>
            <div>
            <ul>
             { items.map((item , index) => (
                 <li key={index}>
                   {item.ProductName} - {item.Category} - {item.Price}
+                  <button onClick={() => deleteItem(index)}>Delete</button>
                 </li>
              ))}
-           
            </ul>
            </div>
         </div>
